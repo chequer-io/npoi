@@ -2114,51 +2114,6 @@ namespace NPOI.HSSF.UserModel
         }
 
         /// <summary>
-        /// Gets all embedded OLE2 objects from the Workbook.
-        /// </summary>
-        /// <returns>the list of embedded objects (a list of HSSFObjectData objects.)</returns>
-        public IList<HSSFObjectData> GetAllEmbeddedObjects()
-        {
-            List<HSSFObjectData> objects = new List<HSSFObjectData>();
-            foreach (HSSFSheet sheet in _sheets)
-            {
-                GetAllEmbeddedObjects(sheet, objects);
-            }
-            return objects;
-        }
-
-        /// <summary>
-        /// Gets all embedded OLE2 objects from the Workbook.
-        /// </summary>
-        /// <param name="sheet">the list of records to search.</param>
-        /// <param name="objects">the list of embedded objects to populate.</param>
-        private void GetAllEmbeddedObjects(HSSFSheet sheet, List<HSSFObjectData> objects)
-        {
-            HSSFPatriarch patriarch = sheet.DrawingPatriarch as HSSFPatriarch;
-            if (null == patriarch)
-            {
-                return;
-            }
-            GetAllEmbeddedObjects(patriarch, objects);
-        }
-
-        /// <summary>
-        /// Recursively iterates a shape container to get all embedded objects.
-        /// </summary>
-        /// <param name="parent">the parent.</param>
-        /// <param name="objects">the list of embedded objects to populate.</param>
-        private void GetAllEmbeddedObjects(HSSFShapeContainer parent, List<HSSFObjectData> objects)
-        {
-            foreach (HSSFShape shape in parent.Children) {
-                if (shape is HSSFObjectData) {
-                    objects.Add((HSSFObjectData) shape);
-                } else if (shape is HSSFShapeContainer) {
-                    GetAllEmbeddedObjects((HSSFShapeContainer) shape, objects);
-                }
-            }
-        }
-
-        /// <summary>
         /// Gets the new UID.
         /// </summary>
         /// <value>The new UID.</value>

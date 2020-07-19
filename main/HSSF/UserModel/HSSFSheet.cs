@@ -2310,18 +2310,7 @@ namespace NPOI.HSSF.UserModel
         /// <param name="useMergedCells">whether to use the contents of merged cells when calculating the width of the column</param>
         public void AutoSizeColumn(int column, bool useMergedCells)
         {
-            double width = SheetUtil.GetColumnWidth(this, column, useMergedCells);
-            if (width != -1)
-            {
-                width *= 256;
-                int maxColumnWidth = 255 * 256; // The maximum column width for an individual cell is 255 characters
-
-                if (width > maxColumnWidth)
-                {
-                    width = maxColumnWidth;
-                }
-                SetColumnWidth(column, (int)width);
-            }
+            throw new NotSupportedException();
         }
 
         /// <summary>
@@ -2369,15 +2358,6 @@ namespace NPOI.HSSF.UserModel
                 }
                 return addresses;
             }
-        }
-        /// <summary>
-        /// Convert HSSFFont to Font.
-        /// </summary>
-        /// <param name="font1">The font.</param>
-        /// <returns></returns>
-        public System.Drawing.Font HSSFFont2Font(HSSFFont font1)
-        {
-            return new System.Drawing.Font(font1.FontName, (float)font1.FontHeightInPoints);
         }
 
         /// <summary>

@@ -172,24 +172,6 @@ namespace NPOI.HSSF.UserModel
         }
 
         /// <summary>
-        /// Creates a picture.
-        /// </summary>
-        /// <param name="anchor">the client anchor describes how this Group is attached
-        /// to the sheet.</param>
-        /// <param name="pictureIndex">Index of the picture.</param>
-        /// <returns>the newly created shape.</returns>
-        public IPicture CreatePicture(HSSFClientAnchor anchor, int pictureIndex)
-        {
-            HSSFPicture shape = new HSSFPicture(null, (HSSFClientAnchor)anchor);
-            shape.PictureIndex = pictureIndex;
-            AddShape(shape);
-
-            //open existing file
-            OnCreate(shape);
-            return shape;
-        }
-
-        /// <summary>
         /// CreatePicture
         /// </summary>
         /// <param name="anchor">the client anchor describes how this picture is attached to the sheet.</param>
@@ -198,94 +180,6 @@ namespace NPOI.HSSF.UserModel
         public IPicture CreatePicture(IClientAnchor anchor, int pictureIndex)
         {
             return CreatePicture((HSSFClientAnchor)anchor, pictureIndex);
-        }
-
-        /**
-     * Adds a new OLE Package Shape 
-     * 
-     * @param anchor       the client anchor describes how this picture is
-     *                     attached to the sheet.
-     * @param storageId    the storageId returned by {@Link HSSFWorkbook.AddOlePackage}
-     * @param pictureIndex the index of the picture (used as preview image) in the
-     *                     workbook collection of pictures.
-     *
-     * @return newly Created shape
-     */
-        public HSSFObjectData CreateObjectData(HSSFClientAnchor anchor, int storageId, int pictureIndex)
-        {
-            ObjRecord obj = new ObjRecord();
-
-            CommonObjectDataSubRecord ftCmo = new CommonObjectDataSubRecord();
-            ftCmo.ObjectType = (/*setter*/CommonObjectType.Picture);
-            // ftCmo.ObjectId=(/*setter*/oleShape.ShapeId); ... will be Set by onCreate(...)
-            ftCmo.IsLocked = (/*setter*/true);
-            ftCmo.IsPrintable = (/*setter*/true);
-            ftCmo.IsAutoFill = (/*setter*/true);
-            ftCmo.IsAutoline = (/*setter*/true);
-            ftCmo.Reserved1 = (/*setter*/0);
-            ftCmo.Reserved2 = (/*setter*/0);
-            ftCmo.Reserved3 = (/*setter*/0);
-            obj.AddSubRecord(ftCmo);
-
-            // FtCf (pictFormat) 
-            FtCfSubRecord ftCf = new FtCfSubRecord();
-            HSSFPictureData pictData = Sheet.Workbook.GetAllPictures()[(pictureIndex - 1)] as HSSFPictureData;
-            switch ((PictureType)pictData.Format)
-            {
-                case PictureType.WMF:
-                case PictureType.EMF:
-                    // this needs patch #49658 to be applied to actually work 
-                    ftCf.Flags = (/*setter*/FtCfSubRecord.METAFILE_BIT);
-                    break;
-                case PictureType.DIB:
-                case PictureType.PNG:
-                case PictureType.JPEG:
-                case PictureType.PICT:
-                    ftCf.Flags = (/*setter*/FtCfSubRecord.BITMAP_BIT);
-                    break;
-                default:
-                    throw new InvalidOperationException("Invalid picture type: " + pictData.Format);
-            }
-            obj.AddSubRecord(ftCf);
-            // FtPioGrbit (pictFlags)
-            FtPioGrbitSubRecord ftPioGrbit = new FtPioGrbitSubRecord();
-            ftPioGrbit.SetFlagByBit(FtPioGrbitSubRecord.AUTO_PICT_BIT, true);
-            obj.AddSubRecord(ftPioGrbit);
-
-            EmbeddedObjectRefSubRecord ftPictFmla = new EmbeddedObjectRefSubRecord();
-            ftPictFmla.SetUnknownFormulaData(new byte[] { 2, 0, 0, 0, 0 });
-            ftPictFmla.OLEClassName = (/*setter*/"Paket");
-            ftPictFmla.SetStorageId(storageId);
-
-            obj.AddSubRecord(ftPictFmla);
-            obj.AddSubRecord(new EndSubRecord());
-
-            String entryName = "MBD" + HexDump.ToHex(storageId);
-            DirectoryEntry oleRoot;
-            try
-            {
-                DirectoryNode dn = (_sheet.Workbook as HSSFWorkbook).RootDirectory;
-                if (dn == null) throw new FileNotFoundException();
-                oleRoot = (DirectoryEntry)dn.GetEntry(entryName);
-            }
-            catch (FileNotFoundException e)
-            {
-                throw new InvalidOperationException("trying to add ole shape without actually Adding data first - use HSSFWorkbook.AddOlePackage first", e);
-            }
-
-            // create picture shape, which need to be minimal modified for oleshapes
-            HSSFPicture shape = new HSSFPicture(null, anchor);
-            shape.PictureIndex = (/*setter*/pictureIndex);
-            EscherContainerRecord spContainer = shape.GetEscherContainer();
-            EscherSpRecord spRecord = spContainer.GetChildById(EscherSpRecord.RECORD_ID) as EscherSpRecord;
-            spRecord.Flags = (/*setter*/spRecord.Flags | EscherSpRecord.FLAG_OLESHAPE);
-
-            HSSFObjectData oleShape = new HSSFObjectData(spContainer, obj, oleRoot);
-            AddShape(oleShape);
-            OnCreate(oleShape);
-
-
-            return oleShape;
         }
 
         /// <summary>

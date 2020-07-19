@@ -240,33 +240,6 @@ namespace NPOI.HSSF.UserModel
         }
 
         /// <summary>
-        /// Creates a picture.
-        /// </summary>
-        /// <param name="anchor">the client anchor describes how this Group Is attached
-        /// to the sheet.</param>
-        /// <param name="pictureIndex">Index of the picture.</param>
-        /// <returns>the newly Created shape.</returns>
-        public HSSFPicture CreatePicture(HSSFChildAnchor anchor, int pictureIndex)
-        {
-            HSSFPicture shape = new HSSFPicture(this, anchor);
-            shape.Parent = this;
-            shape.Anchor = anchor;
-            shape.PictureIndex=pictureIndex;
-            shapes.Add(shape);
-            OnCreate(shape);
-            EscherSpRecord sp = (EscherSpRecord)shape.GetEscherContainer().GetChildById(EscherSpRecord.RECORD_ID);
-            if (shape.Anchor.IsHorizontallyFlipped)
-            {
-                sp.Flags = (sp.Flags | EscherSpRecord.FLAG_FLIPHORIZ);
-            }
-            if (shape.Anchor.IsVerticallyFlipped)
-            {
-                sp.Flags = (sp.Flags | EscherSpRecord.FLAG_FLIPVERT);
-            }
-            return shape;
-        }
-
-        /// <summary>
         /// Return all children contained by this shape.
         /// </summary>
         /// <value></value>

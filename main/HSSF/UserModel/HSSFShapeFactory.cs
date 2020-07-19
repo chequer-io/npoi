@@ -79,19 +79,11 @@ namespace NPOI.HSSF.UserModel
                             break;
                     }
                 }
-                if (IsEmbeddedObject(objRecord))
-                {
-                    HSSFObjectData objectData = new HSSFObjectData(container, objRecord, root);
-                    out1.AddShape(objectData);
-                    return;
-                }
+
                 CommonObjectDataSubRecord cmo = (CommonObjectDataSubRecord)objRecord.SubRecords[0];
                 HSSFShape shape;
                 switch (cmo.ObjectType)
                 {
-                    case CommonObjectType.Picture:
-                        shape = new HSSFPicture(container, objRecord);
-                        break;
                     case CommonObjectType.Rectangle:
                         shape = new HSSFSimpleShape(container, objRecord, txtRecord);
                         break;

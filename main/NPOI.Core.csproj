@@ -22,7 +22,6 @@
     <PackageReference Include="Portable.BouncyCastle" Version="1.8.6" />
     <PackageReference Include="SharpZipLib" Version="1.2.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
-    <PackageReference Include="System.Drawing.Common" Version="4.5.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.0" />
   </ItemGroup>
 
