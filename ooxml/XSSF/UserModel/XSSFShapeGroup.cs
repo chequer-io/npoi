@@ -140,29 +140,6 @@ namespace NPOI.XSSF.UserModel
             return shape;
         }
 
-        /**
-         * Creates a picture.
-         *
-         * @param anchor       the client anchor describes how this picture is attached to the sheet.
-         * @param pictureIndex the index of the picture in the workbook collection of pictures,
-         *                     {@link XSSFWorkbook#getAllPictures()} .
-         * @return the newly Created picture shape.
-         */
-        public XSSFPicture CreatePicture(XSSFClientAnchor anchor, int pictureIndex)
-        {
-            PackageRelationship rel = GetDrawing().AddPictureReference(pictureIndex);
-
-            CT_Picture ctShape = ctGroup.AddNewPic();
-            ctShape.Set(XSSFPicture.Prototype());
-
-            XSSFPicture shape = new XSSFPicture(GetDrawing(), ctShape);
-            shape.parent = this;
-            shape.anchor = anchor;
-            shape.SetPictureReference(rel);
-            return shape;
-        }
-
-
         public CT_GroupShape GetCTGroupShape()
         {
             return ctGroup;

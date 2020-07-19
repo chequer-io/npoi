@@ -143,26 +143,14 @@ namespace NPOI.XSSF.UserModel
          */
         public IPicture CreatePicture(XSSFClientAnchor anchor, int pictureIndex)
         {
-            PackageRelationship rel = AddPictureReference(pictureIndex);
-
-            long shapeId = newShapeId();
-            CT_TwoCellAnchor ctAnchor = CreateTwoCellAnchor(anchor);
-            CT_Picture ctShape = ctAnchor.AddNewPic();
-            ctShape.Set(XSSFPicture.Prototype());
-
-            ctShape.nvPicPr.cNvPr.id = (uint)shapeId;
-            ctShape.nvPicPr.cNvPr.name = "Picture " + shapeId;
-
-            XSSFPicture shape = new XSSFPicture(this, ctShape);
-            shape.anchor = anchor;
-            shape.SetPictureReference(rel);
-            return shape;
+            throw new NotSupportedException();
         }
 
         public IPicture CreatePicture(IClientAnchor anchor, int pictureIndex)
         {
             return CreatePicture((XSSFClientAnchor)anchor, pictureIndex);
         }
+
         /// <summary>
         /// Creates a chart.
         /// </summary>
@@ -396,7 +384,7 @@ namespace NPOI.XSSF.UserModel
                 XSSFShape shape = null;
                 if (anchor.picture != null)
                 {
-                    shape = new XSSFPicture(this, anchor.picture);
+                    throw new NotSupportedException();
                 }
                 else if (anchor.connector != null)
                 {
