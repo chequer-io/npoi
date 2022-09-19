@@ -440,7 +440,7 @@ namespace NPOI.XSSF.Streaming
             ZipFile zip = new ZipFile(zipfile.FullName);
             try
             {
-                ZipOutputStream zos = new ZipOutputStream(outStream);
+                Ionic.Zip.ZipOutputStream zos = new Ionic.Zip.ZipOutputStream(outStream);
                 try
                 {
                     //ZipEntrySource zipEntrySource = new ZipFileZipEntrySource(zip);
@@ -449,7 +449,7 @@ namespace NPOI.XSSF.Streaming
                     while (en.MoveNext())
                     {
                         var ze = (ZipEntry)en.Current;
-                        zos.PutNextEntry(new ZipEntry(ze.Name));
+                        zos.PutNextEntry(ze.Name);
                         var inputStream = zip.GetInputStream(ze);
                         XSSFSheet xSheet = GetSheetFromZipEntryName(ze.Name);
                         if (xSheet != null)
